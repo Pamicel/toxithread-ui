@@ -1,112 +1,168 @@
+export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> =
+  & Omit<T, K>
+  & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> =
+  & Omit<T, K>
+  & { [SubKey in K]: Maybe<T[SubKey]> };
+/** All built-in and custom scalars, mapped to their actual values */
+export type Scalars = {
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+};
+
 export type Color = {
-  r: number;
-  g: number;
-  b: number;
-  alpha?: number;
+  __typename?: "Color";
+  r: Scalars["Int"];
+  g: Scalars["Int"];
+  b: Scalars["Int"];
+  alpha?: Maybe<Scalars["Float"]>;
 };
 
-export type ConfigBase = {
-  seed: number;
-  updatesPerFrame: number;
+export type ColorInput = {
+  r: Scalars["Int"];
+  g: Scalars["Int"];
+  b: Scalars["Int"];
+  alpha?: Maybe<Scalars["Float"]>;
 };
 
-/**
-  "canvas": {
-    "backgroundImage": {
-      "enabled": false,
-      "pathName": "image2"
-    },
-    "backgroundColor": { "r": 0, "g": 0, "b": 0, "alpha": 1 }
-  },
- */
+export type BackgroundImageConfig = {
+  __typename?: "BackgroundImageConfig";
+  enabled: Scalars["Boolean"];
+  url?: Maybe<Scalars["String"]>;
+};
+
+export type BackgroundImageConfigInput = {
+  enabled?: Maybe<Scalars["Boolean"]>;
+  url?: Maybe<Scalars["String"]>;
+};
+
 export type CanvasConfig = {
-  backgroundImage: {
-    enabled: boolean;
-    pathName: string;
-  };
+  __typename?: "CanvasConfig";
+  backgroundImage: BackgroundImageConfig;
   backgroundColor: Color;
 };
 
-export type TrailTrajectory = {
-  name: string;
-  /*
-    "resample": {
-      "enabled": true,
-      "regular": false,
-      "length": 122
-    },
-  */
-  resample: {
-    enabled: boolean;
-    regular: boolean;
-    length: number;
-  };
-  /*
-    "behaviour": {
-      "minSpeedFactor": 10,
-      "maxSpeedFactor": 10
-    }
-  */
-  behaviour: {
-    minSpeedFactor: number;
-    maxSpeedFactor: number;
-  };
+export type CanvasConfigInput = {
+  backgroundImage: BackgroundImageConfigInput;
+  backgroundColor?: Maybe<ColorInput>;
 };
 
-export type TrailRenderingOptions =
-  | "beads"
-  | "beadsWithoutExtremities"
-  | "beadsOneInTwo"
-  | "beadsStraight"
-  | "skeleton"
-  | "displayPoints";
+export type TrailTrajectoryResample = {
+  __typename?: "TrailTrajectoryResample";
+  enabled: Scalars["Boolean"];
+  regular: Scalars["Boolean"];
+  length: Scalars["Int"];
+};
 
-/**
-  "shape": {
-    "witdhFunction": "CONSTANT",
-    "minRadiusFactor": 1,
-    "maxRadiusFactor": 1,
-    "angleVariability": 0
-  },
-  // color
-  "trailColor": { "r": 255, "g": 255, "b": 255, "alpha": 1 },
-  // "amount of ink" (kinda)
-  "particleDiamFactor": 1,
-  // number of horizontal springs
-  "nLinks": 100,
-  // springs strength
-  "strength": 0.1,
+export type TrailTrajectoryResampleInput = {
+  enabled?: Maybe<Scalars["Boolean"]>;
+  regular?: Maybe<Scalars["Boolean"]>;
+  length?: Maybe<Scalars["Int"]>;
+};
 
-  // multiple "layers" printed
-  "renderingPipeline": [
-    "beads"
-    "beadsWithoutExtremities"
-    "beadsOneInTwo"
-    "beadsStraight"
-    "skeleton"
-    "displayPoints"
-  ]
-*/
+export type TrailTrajectoryBehaviour = {
+  __typename?: "TrailTrajectoryBehaviour";
+  minSpeedFactor: Scalars["Float"];
+  maxSpeedFactor: Scalars["Float"];
+};
+
+export type TrailTrajectoryBehaviourInput = {
+  minSpeedFactor: Scalars["Float"];
+  maxSpeedFactor: Scalars["Float"];
+};
+
+export enum ShapeFunction {
+  Constant = "CONSTANT",
+  FromSmall = "FROM_SMALL",
+  ToSmall = "TO_SMALL",
+}
+
+export type TrailShape = {
+  __typename?: "TrailShape";
+  widthFunction: ShapeFunction;
+  minRadiusFactor: Scalars["Float"];
+  maxRadiusFactor: Scalars["Float"];
+  angleVariability: Scalars["Float"];
+};
+
+export type TrailShapeInput = {
+  widthFunction?: Maybe<ShapeFunction>;
+  minRadiusFactor?: Maybe<Scalars["Float"]>;
+  maxRadiusFactor?: Maybe<Scalars["Float"]>;
+  angleVariability?: Maybe<Scalars["Float"]>;
+};
+
+export enum TrailRenderingOptions {
+  Beads = "beads",
+  BeadsWithoutExtremities = "beadsWithoutExtremities",
+  BeadsOneInTwo = "beadsOneInTwo",
+  BeadsStraight = "beadsStraight",
+  Skeleton = "skeleton",
+  DisplayPoints = "displayPoints",
+}
+
 export type TrailAspect = {
-  shape: {
-    widthFunction: "CONSTANT" | "FROM_SMALL" | "TO_SMALL";
-    minRadiusFactor: number;
-    maxRadiusFactor: number;
-    angleVariability: number;
-  };
+  __typename?: "TrailAspect";
+  shape?: Maybe<TrailShape>;
   trailColor: Color;
-  particleDiamFactor: number;
-  nLinks: number;
-  strength: number;
-  renderingPipeline: TrailRenderingOptions[];
+  particleDiamFactor: Scalars["Float"];
+  nLinks: Scalars["Int"];
+  strength: Scalars["Float"];
+  renderingPipeline: Array<TrailRenderingOptions>;
+};
+
+export type TrailAspectInput = {
+  shape?: Maybe<TrailShapeInput>;
+  trailColor?: Maybe<ColorInput>;
+  particleDiamFactor?: Maybe<Scalars["Float"]>;
+  nLinks?: Maybe<Scalars["Int"]>;
+  strength?: Maybe<Scalars["Float"]>;
+  renderingPipeline?: Maybe<Array<TrailRenderingOptions>>;
+};
+
+export type TrailTrajectory = {
+  __typename?: "TrailTrajectory";
+  name: Scalars["String"];
+  resample: TrailTrajectoryResample;
+  behaviour: TrailTrajectoryBehaviour;
+};
+
+export type TrailTrajectoryInput = {
+  name: Scalars["String"];
+  resample: TrailTrajectoryResampleInput;
+  behaviour: TrailTrajectoryBehaviourInput;
 };
 
 export type TrailConfig = {
-  trajectory: TrailTrajectory;
-  aspect: TrailAspect;
+  __typename?: "TrailConfig";
+  trajectory?: Maybe<TrailTrajectory>;
+  aspect?: Maybe<TrailAspect>;
 };
 
-export type Config = ConfigBase & {
-  trails: TrailConfig[];
+export type TrailConfigInput = {
+  trajectory?: Maybe<TrailTrajectoryInput>;
+  aspect?: Maybe<TrailAspectInput>;
+};
+
+export type Config = {
+  __typename?: "Config";
+  name: Scalars["String"];
+  seed: Scalars["Int"];
+  updatesPerFrame?: Maybe<Scalars["Int"]>;
   canvas: CanvasConfig;
+  trails: Array<Maybe<TrailConfig>>;
+};
+
+export type ConfigInput = {
+  seed?: Maybe<Scalars["Int"]>;
+  updatesPerFrame?: Maybe<Scalars["Int"]>;
+  canvas?: Maybe<CanvasConfigInput>;
+  trails?: Maybe<Array<Maybe<TrailConfigInput>>>;
 };

@@ -1,5 +1,5 @@
 import * as path from "https://deno.land/std@0.167.0/path/mod.ts";
-import { ConfigInput } from "./gqlTypes.ts";
+import { Config } from "./types.ts";
 
 const dirname = new URL(".", import.meta.url).pathname;
 const CONFIG_DIR = path.join(dirname, "configs/");
@@ -22,7 +22,7 @@ export const getConfig = async (name: string): Promise<Config> => {
 
 export const createConfig = async (
   name: string,
-  config: ConfigInput,
+  config: Config,
 ): Promise<Config> => {
   // Write to file CONFIG_DIR/name.json
   const filepath = path.join(CONFIG_DIR, `${name.toLowerCase()}.json`);

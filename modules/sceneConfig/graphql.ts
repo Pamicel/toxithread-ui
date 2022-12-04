@@ -1,4 +1,6 @@
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
+import { Config, ConfigInput } from "./types.ts";
+import * as Controller from "./controller.ts";
 
 export const typeDefs = gql`
   type Color {
@@ -31,8 +33,8 @@ export const typeDefs = gql`
   }
 
   input CanvasConfigInput {
-    backgroundImage: BackgroundImageConfigInput!
-    backgroundColor: ColorInput
+    backgroundImage: BackgroundImageConfigInput = { enabled: false }
+    backgroundColor: ColorInput = { r: 0, g: 0, b: 0, alpha: 1 }
   }
 
   type TrailTrajectoryResample {
@@ -149,3 +151,26 @@ export const typeDefs = gql`
     createConfig(name: String, config: ConfigInput): Config
   }
 `;
+
+export const resolvers = {
+  Query: {
+    config(
+      _: never,
+      { name }: { name: string },
+    ): Promise<Config> {
+      console.log("Query.config", name);
+      return Controller.getConfig(name);
+    },
+  },
+  Mutation: {
+    async createConfig(
+      _: never,
+      args: { name: string; config: ConfigInput },
+    ): Promise<Config> {
+      const { name, config } = args;
+      console.log("Mutation.createConfig", name, config);
+      const newConfig = await Controller.createConfig(name, config);
+      return newConfig;
+    },
+  },
+};
