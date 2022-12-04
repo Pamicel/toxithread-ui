@@ -13,8 +13,21 @@ export const getConfig = async (name: string): Promise<Config> => {
     // Return the config
     return JSON.parse(config);
   } catch (error) {
-    if (error?.name === "NotFound") {
+    if (error instanceof Deno.errors.NotFound) {
       throw new Error("Config not found");
+    }
+    throw error;
+  }
+};
+
+const configExists = async (name: string): Promise<boolean> => {
+  const filepath = path.join(CONFIG_DIR, `${name.toLowerCase()}.json`);
+  try {
+    await Deno.stat(filepath);
+    return true;
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      return false;
     }
     throw error;
   }
@@ -24,6 +37,9 @@ export const createConfig = async (
   name: string,
   config: Config,
 ): Promise<Config> => {
+  if (await configExists(name)) {
+    throw new Error(`Config with name ${name} already exists`);
+  }
   // Write to file CONFIG_DIR/name.json
   const filepath = path.join(CONFIG_DIR, `${name.toLowerCase()}.json`);
   await Deno.writeTextFile(filepath, JSON.stringify(config));
