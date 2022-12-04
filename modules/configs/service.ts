@@ -42,7 +42,7 @@ export const createConfig = async (
   }
   // Write to file CONFIG_DIR/name.json
   const filepath = path.join(CONFIG_DIR, `${name.toLowerCase()}.json`);
-  await Deno.writeTextFile(filepath, JSON.stringify(config));
+  await Deno.writeTextFile(filepath, JSON.stringify(config, null, 2));
   // Return the config
   return config;
 };
