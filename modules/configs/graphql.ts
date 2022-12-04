@@ -149,6 +149,7 @@ export const typeDefs = gql`
 
   type Mutation {
     createConfig(name: String, config: ConfigInput): Config
+    updateConfig(name: String, config: ConfigInput): Config
   }
 `;
 
@@ -170,6 +171,15 @@ export const resolvers = {
       const { name, config } = args;
       console.log("Mutation.createConfig", name, config);
       const newConfig = await Controller.createConfig(name, config);
+      return newConfig;
+    },
+    async updateConfig(
+      _: never,
+      args: { name: string; config: ConfigInput },
+    ): Promise<Config> {
+      const { name, config } = args;
+      console.log("Mutation.updateConfig", name, config);
+      const newConfig = await Controller.updateConfig(name, config);
       return newConfig;
     },
   },

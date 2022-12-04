@@ -46,9 +46,19 @@ const configInputToConfig = (
   };
 };
 
-export function createConfig(
+export async function createConfig(
   name: string,
   config: ConfigInput,
 ): Promise<Config> {
-  return Service.createConfig(name, configInputToConfig(name, config));
+  if (await Service.configExists(name)) {
+    throw new Error(`Config with name ${name} already exists`);
+  }
+  return Service.writeConfig(name, configInputToConfig(name, config));
+}
+
+export function updateConfig(
+  name: string,
+  config: ConfigInput,
+): Promise<Config> {
+  return Service.writeConfig(name, configInputToConfig(name, config));
 }
