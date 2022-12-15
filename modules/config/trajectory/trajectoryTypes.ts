@@ -1,4 +1,4 @@
-import { Maybe, Scalars } from "../types.ts";
+import { Maybe, Scalars } from "../../types.ts";
 
 export enum ResampleOption {
   None = "NONE",

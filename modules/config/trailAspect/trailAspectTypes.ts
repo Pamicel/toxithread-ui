@@ -1,4 +1,4 @@
-import { Color, ColorInput, Scalars } from "../types.ts";
+import { Color, ColorInput, Scalars } from "../../types.ts";
 
 export enum TrailRenderingOption {
   Beads = "beads",

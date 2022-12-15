@@ -1,4 +1,4 @@
-import { Color, ColorInput, Maybe, Scalars } from "../types.ts";
+import { Color, ColorInput, Maybe, Scalars } from "../../types.ts";
 
 export type CanvasConfig = {
   __typename?: "CanvasConfig";

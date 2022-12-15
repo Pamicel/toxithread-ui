@@ -20,7 +20,7 @@ export const colorSchema = new Schema({
 });
 
 export const canvasConfigSchema = new Schema({
-  backGroundImageUrl: {
+  backgroundImageUrl: {
     type: String,
     required: false,
   },

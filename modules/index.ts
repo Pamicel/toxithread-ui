@@ -1,8 +1,8 @@
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
 import { typeDefs as configTypeDefs } from "./config/configGraphql.ts";
-import { typeDefs as trajectoryTypeDefs } from "./trajectory/trajectoryGraphql.ts";
-import { typeDefs as canvasConfigTypeDefs } from "./canvasConfig/canvasConfigGraphql.ts";
-import { typeDefs as trailAspectTypeDefs } from "./trailAspect/trailAspectGraphql.ts";
+import { typeDefs as trajectoryTypeDefs } from "./config/trajectory/trajectoryGraphql.ts";
+import { typeDefs as canvasConfigTypeDefs } from "./config/canvasConfig/canvasConfigGraphql.ts";
+import { typeDefs as trailAspectTypeDefs } from "./config/trailAspect/trailAspectGraphql.ts";
 import {
   APIConfig,
   APIConfigCreateInput,
