@@ -34,7 +34,7 @@ export type APIConfig = {
 export type APIConfigCreateInput = {
   seed?: Scalars["Int"];
   updatesPerFrame?: Scalars["Int"];
-  // canvas?: CanvasConfigCreateInput;
+  canvas?: CanvasConfigCreateInput;
 };
 
 export type APIConfigUpdateInput = {

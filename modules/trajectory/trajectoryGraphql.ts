@@ -1,6 +1,3 @@
-// import { db } from "../../data/index.ts";
-import { Trajectory, TrajectoryCreateInput } from "./trajectoryTypes.ts";
-
 export const typeDefs = `#graphql
   enum ResampleOption {
     NONE
@@ -31,20 +28,3 @@ export const typeDefs = `#graphql
     maxSpeedFactor: Float!
   }
 `;
-
-// const collection = db.collection<Trajectory>("TrajectoryConfig");
-
-// export const getTrajectoryConfig = async (
-//   _id: string,
-// ): Promise<Trajectory | undefined> => {
-//   const trajectoryConfig = await collection.findOne({ _id });
-//   return trajectoryConfig;
-// };
-
-// export const createTrajectoryConfig = async (
-//   config: TrajectoryCreateInput,
-// ): Promise<Trajectory | undefined> => {
-//   const newConfigId = await collection.insertOne({ ...config });
-//   const newConfig = await collection.findOne({ _id: newConfigId });
-//   return newConfig;
-// };

@@ -1,6 +1,6 @@
 import { Color, ColorInput, Scalars } from "../types.ts";
 
-export enum TrailRenderingOptions {
+export enum TrailRenderingOption {
   Beads = "beads",
   BeadsWithoutExtremities = "beadsWithoutExtremities",
   BeadsOneInTwo = "beadsOneInTwo",
@@ -17,12 +17,11 @@ export enum ShapeFunction {
 
 export type TrailAspect = {
   __typename?: "TrailAspect";
-  _id: Scalars["ID"];
   trailColor: Color;
   particleDiamFactor: Scalars["Float"];
   nLinks: Scalars["Int"];
   strength: Scalars["Float"];
-  renderingPipeline: Array<TrailRenderingOptions>;
+  renderingPipeline: Array<TrailRenderingOption>;
   widthFunction: ShapeFunction;
   minRadiusFactor: Scalars["Float"];
   maxRadiusFactor: Scalars["Float"];
@@ -34,7 +33,7 @@ export type TrailAspectCreateInput = {
   particleDiamFactor: Scalars["Float"];
   nLinks: Scalars["Int"];
   strength: Scalars["Float"];
-  renderingPipeline: Array<TrailRenderingOptions>;
+  renderingPipeline: Array<TrailRenderingOption>;
   widthFunction: ShapeFunction;
   minRadiusFactor: Scalars["Float"];
   maxRadiusFactor: Scalars["Float"];

@@ -1,6 +1,3 @@
-// import { db } from "../../data/index.ts";
-import { TrailAspect, TrailAspectCreateInput } from "./trailAspectTypes.ts";
-
 export const typeDefs = `#graphql
   enum TrailRenderingOptions {
     beads
@@ -44,22 +41,3 @@ export const typeDefs = `#graphql
     angleVariability: Float!
   }
 `;
-
-// const collection = db.collection<TrailAspect>("TrailAspectConfigs");
-
-// export const getAspectConfig = async (
-//   _id: string,
-// ): Promise<TrailAspect | undefined> => {
-//   console.log(`TrailAspectConfigs - getAspectConfig _id ${_id}`);
-//   const aspectConfig = await collection.findOne({ _id });
-//   return aspectConfig;
-// };
-
-// export const createAspectConfig = async (
-//   config: TrailAspectCreateInput,
-// ): Promise<TrailAspect | undefined> => {
-//   console.log("TrailAspectConfigs - createAspectConfig");
-//   const newConfigId = await collection.insertOne({ ...config });
-//   const newConfig = await collection.findOne({ _id: newConfigId });
-//   return newConfig;
-// };

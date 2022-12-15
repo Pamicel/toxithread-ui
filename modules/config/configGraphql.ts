@@ -9,13 +9,14 @@ export const typeDefs = `#graphql
     name: String!
     seed: Int!
     updatesPerFrame: Int
-    # canvas: CanvasConfig
+    canvas: CanvasConfig
     # trails: [TrailConfig]!
   }
 
   input ConfigCreateInput {
     seed: Int
     updatesPerFrame: Int
+    # canvas: CanvasConfigCreateInput
   }
 
   input ConfigUpdateInput {
