@@ -1,4 +1,4 @@
-import { Schema } from "npm:mongoose@6.7";
+import { model, Schema } from "npm:mongoose@6.7";
 import { ResampleOption } from "./trajectoryTypes.ts";
 
 const trajectoryResampleSchema = new Schema({
@@ -27,3 +27,5 @@ export const trajectorySchema = new Schema({
     default: 1,
   },
 });
+
+export const trajectoryModel = model("Trajectory", trajectorySchema);

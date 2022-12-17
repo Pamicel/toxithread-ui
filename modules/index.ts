@@ -10,6 +10,7 @@ import {
   Config,
 } from "./config/configTypes.ts";
 import * as ConfigService from "./config/configService.ts";
+import { APICanvasConfigCreateInput } from "./config/canvasConfig/canvasConfigTypes.ts";
 
 const sharedTypeDefs = `#graphql
   type Color {
@@ -28,6 +29,7 @@ const sharedTypeDefs = `#graphql
   type Mutation {
     createConfig(name: String, elements: ConfigCreateInput): Config
     updateConfig(name: String, updates: ConfigUpdateInput): Config
+    # updateCanvasConfig(id: ID, updates: CanvasConfigUpdateInput): CanvasConfig
 
     # Add canvas to config
     # Add trail to config
@@ -71,10 +73,22 @@ export const resolvers = {
   Mutation: {
     async createConfig(
       _: never,
-      { name, elements }: { name: string; elements: APIConfigCreateInput },
+      { name, mainValues, canvas }: {
+        name: string;
+        mainValues: APIConfigCreateInput;
+        canvas: APICanvasConfigCreateInput;
+      },
     ): Promise<APIConfig | undefined> {
-      console.log(`Mutation.createConfig ${name}, ${JSON.stringify(elements)}`);
-      const config = await ConfigService.createConfig({ name, elements });
+      console.log(
+        `Mutation.createConfig ${name}, ${JSON.stringify(mainValues)}, ${
+          JSON.stringify(canvas)
+        }`,
+      );
+      const config = await ConfigService.createConfig({
+        name,
+        mainValues,
+        canvas,
+      });
 
       if (!config) {
         throw new Error("Config not created");
@@ -90,17 +104,23 @@ export const resolvers = {
     },
     async updateConfig(
       _: never,
-      { _id, updates }: { _id: string; updates: APIConfigUpdateInput },
+      { name, updates }: { name: string; updates: APIConfigUpdateInput },
     ): Promise<APIConfig | undefined> {
-      console.log(`Mutation.updateConfig ${_id} ${JSON.stringify(updates)}`);
+      console.log(`Mutation.updateConfig ${name} ${JSON.stringify(updates)}`);
       const newConfig = await ConfigService.updateConfig({
-        configId: _id,
+        name,
         updates,
       });
       if (!newConfig) {
         throw new Error("Config not updated");
       }
-      return configToAPIConfig(newConfig);
+      try {
+        const apiConfig = configToAPIConfig(newConfig);
+        return apiConfig;
+      } catch (error) {
+        console.error("Error converting config to APIConfig", error);
+        throw new Error("Error converting config to APIConfig");
+      }
     },
   },
 };

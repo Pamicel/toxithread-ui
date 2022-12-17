@@ -16,7 +16,6 @@ export const typeDefs = `#graphql
   input ConfigCreateInput {
     seed: Int
     updatesPerFrame: Int
-    canvas: CanvasConfigCreateInput
   }
 
   input ConfigUpdateInput {
@@ -24,4 +23,9 @@ export const typeDefs = `#graphql
     seed: Int
     updatesPerFrame: Int
   }
+
+  # input ConfigUnsetInput {
+  #   unsetCanvas: Boolean
+  #   canvas: CanvasConfigUnsetInput
+  # }
 `;

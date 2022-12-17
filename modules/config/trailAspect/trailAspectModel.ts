@@ -1,4 +1,4 @@
-import { Schema } from "npm:mongoose@6.7";
+import { model, Schema } from "npm:mongoose@6.7";
 import { colorSchema } from "../canvasConfig/canvasConfigModel.ts";
 import { ShapeFunction, TrailRenderingOption } from "./trailAspectTypes.ts";
 
@@ -49,3 +49,8 @@ export const trailAspectSchema = new Schema({
     default: 0,
   },
 });
+
+export const trailAspectModel = model(
+  "TrailAspect",
+  trailAspectSchema,
+);

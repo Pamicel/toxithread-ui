@@ -1,12 +1,18 @@
 import { Config } from "./configTypes.ts";
 
 import ConfigModel from "./configModel.ts";
+import { canvasConfigModel } from "./canvasConfig/canvasConfigModel.ts";
+import { APICanvasConfig } from "./canvasConfig/canvasConfigTypes.ts";
 
 export async function getConfigById(
   { _id }: { _id: string },
 ): Promise<Config | undefined> {
   console.log("config service - getConfigById", _id);
-  const result = await ConfigModel.findOne({ _id });
+  const result = await ConfigModel
+    .findOne({ _id })
+    .populate("canvas")
+    .populate("trails")
+    .exec();
   return result?.toObject<Config>();
 }
 
@@ -14,7 +20,11 @@ export async function getConfigByName(
   { name }: { name: string },
 ): Promise<Config | undefined> {
   console.log("config service - getConfigByName", name);
-  const result = await ConfigModel.findOne({ name });
+  const result = await ConfigModel
+    .findOne({ name })
+    .populate("canvas")
+    .populate("trails")
+    .exec();
   return result?.toObject<Config>();
 }
 
@@ -32,28 +42,43 @@ export async function getConfig(
 export async function createConfig(
   args: {
     name: string;
-    elements?: Omit<Config, "_id" | "name">;
+    mainValues?: Omit<Config, "_id" | "name" | "canvas">;
+    canvas?: Omit<APICanvasConfig, "_id">;
   },
 ): Promise<Config | undefined> {
-  const { name, elements } = args;
+  const { name, mainValues, canvas } = args;
   console.log(
-    `config service - createConfig ${name}, ${JSON.stringify(elements)}`,
+    `config service - createConfig ${name}, ${JSON.stringify(mainValues)}`,
   );
-  const config = await ConfigModel.create({ name, ...elements });
-  return config.toObject<Config>();
+  let newCanvas: APICanvasConfig | undefined = undefined;
+  if (canvas) {
+    newCanvas = await (await canvasConfigModel.create(canvas)).toObject();
+  }
+  const config = await ConfigModel.create({
+    name,
+    ...mainValues,
+    canvas: newCanvas?._id,
+  });
+  return getConfigById({ _id: config._id.toString() });
 }
 
 export async function updateConfig(
-  { configId, updates }: {
-    configId: string;
+  { name, updates }: {
+    name: string;
     updates: Partial<Config>;
   },
 ): Promise<Config | undefined> {
-  console.log(`config service - updateConfig ${configId}, ${updates}`);
+  console.log(
+    `config service - updateConfig ${name}, ${JSON.stringify(updates)}`,
+  );
+  const config = await getConfigByName({ name });
+  if (!config) {
+    throw new Error("config not found");
+  }
+  const configId = config._id;
   const result = await ConfigModel.updateOne({ _id: configId }, updates);
   if (result.acknowledged && result.modifiedCount === 0) {
     throw new Error("Config not updated");
   }
-  const newConfig = await ConfigModel.findOne({ _id: configId });
-  return newConfig?.toObject<Config>();
+  return getConfigById({ _id: configId.toString() });
 }

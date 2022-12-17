@@ -9,4 +9,14 @@ export const typeDefs = `#graphql
     backgroundImageUrl: String
     backgroundColor: ColorInput
   }
+
+  input CanvasConfigUpdateInput {
+    backgroundImageUrl: String
+    backgroundColor: ColorInput
+  }
+
+  # input CanvasConfigUnsetInput {
+  #   unsetBackgroundImageUrl: Boolean
+  #   unsetBackgroundColor: Boolean
+  # }
 `;

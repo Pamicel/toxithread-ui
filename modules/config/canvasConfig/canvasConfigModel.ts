@@ -1,4 +1,4 @@
-import { Schema } from "npm:mongoose@6.7";
+import { model, Schema } from "npm:mongoose@6.7";
 
 export const colorSchema = new Schema({
   r: {
@@ -31,3 +31,8 @@ export const canvasConfigSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
+
+export const canvasConfigModel = model(
+  "CanvasConfig",
+  canvasConfigSchema,
+);
