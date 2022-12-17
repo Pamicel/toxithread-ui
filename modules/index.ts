@@ -1,16 +1,16 @@
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
-import { typeDefs as configTypeDefs } from "./config/configGraphql.ts";
-import { typeDefs as trajectoryTypeDefs } from "./config/trajectory/trajectoryGraphql.ts";
-import { typeDefs as canvasConfigTypeDefs } from "./config/canvasConfig/canvasConfigGraphql.ts";
-import { typeDefs as trailAspectTypeDefs } from "./config/trailAspect/trailAspectGraphql.ts";
+import { typeDefs as configTypeDefs } from "./sketchConfig/configGraphql.ts";
+import { typeDefs as trajectoryTypeDefs } from "./sketchConfig/trajectory/trajectoryGraphql.ts";
+import { typeDefs as canvasConfigTypeDefs } from "./sketchConfig/canvasConfig/canvasConfigGraphql.ts";
+import { typeDefs as trailAspectTypeDefs } from "./sketchConfig/trailAspect/trailAspectGraphql.ts";
 import {
   APIConfig,
   APIConfigCreateInput,
   APIConfigUpdateInput,
   Config,
-} from "./config/configTypes.ts";
-import * as ConfigService from "./config/configService.ts";
-import { APICanvasConfigCreateInput } from "./config/canvasConfig/canvasConfigTypes.ts";
+} from "./sketchConfig/configTypes.ts";
+import * as ConfigService from "./sketchConfig/configService.ts";
+import { APICanvasConfigCreateInput } from "./sketchConfig/canvasConfig/canvasConfigTypes.ts";
 
 const sharedTypeDefs = `#graphql
   type Color {
