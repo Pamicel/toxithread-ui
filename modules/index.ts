@@ -33,12 +33,16 @@ const sharedTypeDefs = `#graphql
   }
 
   type Mutation {
-    createConfig(name: String, elements: ConfigCreateInput): Config
+    createConfig(
+      name: String,
+      config: ConfigCreateInput,
+      canvas: CanvasConfigCreateInput
+    ): Config
     updateConfig(name: String, updates: ConfigUpdateInput): Config
     updateCanvasConfig(id: ID, updates: CanvasConfigUpdateInput): CanvasConfig
 
     # Add canvas to config
-    # addCanvasToConfig(id: ID, canvas: CanvasConfigCreateInput): Config
+    addCanvasToConfig(id: ID, canvas: CanvasConfigCreateInput): Config
     # Add trail to config
 
     # Create Trajectory
@@ -90,29 +94,29 @@ export const resolvers = {
   Mutation: {
     async createConfig(
       _: never,
-      { name, mainValues, canvas }: {
+      { name, config, canvas }: {
         name: string;
-        mainValues: APIConfigCreateInput;
+        config: APIConfigCreateInput;
         canvas: APICanvasConfigCreateInput;
       },
     ): Promise<APIConfig | undefined> {
       console.log(
-        `Mutation.createConfig ${name}, ${JSON.stringify(mainValues)}, ${
+        `Mutation.createConfig ${name}, ${JSON.stringify(config)}, ${
           JSON.stringify(canvas)
         }`,
       );
-      const config = await ConfigService.createConfig({
+      const newConfig = await ConfigService.createConfig({
         name,
-        mainValues,
+        config,
         canvas,
       });
 
-      if (!config) {
+      if (!newConfig) {
         throw new Error("Config not created");
       }
 
       try {
-        const apiConfig = configToAPIConfig(config);
+        const apiConfig = configToAPIConfig(newConfig);
         return apiConfig;
       } catch (error) {
         console.error("Error converting config to APIConfig", error);
@@ -154,9 +158,25 @@ export const resolvers = {
         updates,
       });
       if (!newConfig) {
-        throw new Error("Mutation.updateCanvasConfig - Config not updated");
+        throw new Error(
+          "Mutation.updateCanvasConfig - Canvas config not updated",
+        );
       }
       return canvasConfigToAPICanvasConfig(newConfig);
+    },
+    async addCanvasToConfig(
+      _: never,
+      { id, canvas }: { id: string; canvas: APICanvasConfigCreateInput },
+    ): Promise<APIConfig | undefined> {
+      console.log(`Mutation.addCanvasToConfig ${id} ${JSON.stringify(canvas)}`);
+      const newConfig = await ConfigService.addCanvasToConfig({
+        configId: id,
+        canvas,
+      });
+      if (!newConfig) {
+        throw new Error("Mutation.addCanvasToConfig - Config not updated");
+      }
+      return configToAPIConfig(newConfig);
     },
   },
 };

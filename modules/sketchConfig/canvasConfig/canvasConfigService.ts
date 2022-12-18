@@ -2,6 +2,14 @@ import { canvasConfigModel } from "./canvasConfigModel.ts";
 import { CanvasConfig } from "./canvasConfigTypes.ts";
 import { APICanvasConfigCreateInput } from "./canvasConfigTypes.ts";
 
+export async function createCanvasConfig(
+  canvasConfig: APICanvasConfigCreateInput,
+): Promise<CanvasConfig | undefined> {
+  console.log("Canvas config service - createCanvasConfig", canvasConfig);
+  const newCanvasConfig = await canvasConfigModel.create(canvasConfig);
+  return newCanvasConfig.toObject<CanvasConfig>();
+}
+
 export async function getCanvasConfigById(
   _id: string,
 ): Promise<CanvasConfig | undefined> {
