@@ -10,7 +10,13 @@ import {
   Config,
 } from "./sketchConfig/configTypes.ts";
 import * as ConfigService from "./sketchConfig/configService.ts";
-import { APICanvasConfigCreateInput } from "./sketchConfig/canvasConfig/canvasConfigTypes.ts";
+import * as CanvasConfigService from "./sketchConfig/canvasConfig/canvasConfigService.ts";
+import {
+  APICanvasConfig,
+  APICanvasConfigCreateInput,
+  APICanvasConfigUpdateInput,
+  CanvasConfig,
+} from "./sketchConfig/canvasConfig/canvasConfigTypes.ts";
 
 const sharedTypeDefs = `#graphql
   type Color {
@@ -29,9 +35,10 @@ const sharedTypeDefs = `#graphql
   type Mutation {
     createConfig(name: String, elements: ConfigCreateInput): Config
     updateConfig(name: String, updates: ConfigUpdateInput): Config
-    # updateCanvasConfig(id: ID, updates: CanvasConfigUpdateInput): CanvasConfig
+    updateCanvasConfig(id: ID, updates: CanvasConfigUpdateInput): CanvasConfig
 
     # Add canvas to config
+    # addCanvasToConfig(id: ID, canvas: CanvasConfigCreateInput): Config
     # Add trail to config
 
     # Create Trajectory
@@ -53,6 +60,16 @@ const configToAPIConfig = (config: Config): APIConfig => {
     __typename: "Config",
     ...config,
     _id: config._id.toString(),
+  };
+};
+
+const canvasConfigToAPICanvasConfig = (
+  canvasConfig: CanvasConfig,
+): APICanvasConfig => {
+  return {
+    __typename: "CanvasConfig",
+    ...canvasConfig,
+    _id: canvasConfig._id.toString(),
   };
 };
 
@@ -121,6 +138,25 @@ export const resolvers = {
         console.error("Error converting config to APIConfig", error);
         throw new Error("Error converting config to APIConfig");
       }
+    },
+    async updateCanvasConfig(
+      _: never,
+      { id, updates }: {
+        id: string;
+        updates: APICanvasConfigUpdateInput;
+      },
+    ): Promise<APICanvasConfig | undefined> {
+      console.log(
+        `Mutation.updateCanvasConfig ${id} ${JSON.stringify(updates)}`,
+      );
+      const newConfig = await CanvasConfigService.updateCanvasConfig({
+        _id: id,
+        updates,
+      });
+      if (!newConfig) {
+        throw new Error("Mutation.updateCanvasConfig - Config not updated");
+      }
+      return canvasConfigToAPICanvasConfig(newConfig);
     },
   },
 };
