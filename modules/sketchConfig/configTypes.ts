@@ -1,12 +1,12 @@
 import { APICanvasConfig } from "./canvasConfig/canvasConfigTypes.ts";
 import { Maybe, Scalars } from "../types.ts";
 import { ObjectId } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
-import { Trajectory } from "./trajectory/trajectoryTypes.ts";
-import { TrailAspect } from "./trailAspect/trailAspectTypes.ts";
+import { APITrajectory } from "./trajectory/trajectoryTypes.ts";
+import { APITrailAspect } from "./trailAspect/trailAspectTypes.ts";
 
 export type TrailConfig = {
-  trajectory: Trajectory;
-  aspect: TrailAspect;
+  trajectory: APITrajectory;
+  aspect: APITrailAspect;
 };
 
 export type Config = {

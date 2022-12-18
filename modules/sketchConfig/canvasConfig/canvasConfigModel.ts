@@ -32,7 +32,7 @@ export const canvasConfigSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-export const canvasConfigModel = model(
+export const CanvasConfigModel = model(
   "CanvasConfig",
   canvasConfigSchema,
 );

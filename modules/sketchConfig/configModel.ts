@@ -5,7 +5,7 @@ const trailSchema = new Schema({
   trajectory: { type: Schema.Types.ObjectId, ref: "Trajectory" },
 });
 
-export const trailModel = model("Trail", trailSchema);
+export const TrailModel = model("Trail", trailSchema);
 
 export const configSchema = new Schema({
   name: {
@@ -27,4 +27,4 @@ export const configSchema = new Schema({
   trails: [{ type: Schema.Types.ObjectId, ref: "Trail" }],
 });
 
-export default model("Config", configSchema);
+export const ConfigModel = model("Config", configSchema);

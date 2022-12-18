@@ -1,4 +1,5 @@
 import { Maybe, Scalars } from "../../types.ts";
+import { ObjectId } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
 
 export enum ResampleOption {
   None = "NONE",
@@ -12,6 +13,13 @@ export type TrajectoryResampleConfig = {
 };
 
 export type Trajectory = {
+  _id: ObjectId;
+  resample?: Maybe<TrajectoryResampleConfig>;
+  minSpeedFactor: Scalars["Float"];
+  maxSpeedFactor: Scalars["Float"];
+};
+
+export type APITrajectory = {
   __typename?: "Trajectory";
   _id: Scalars["ID"];
   resample?: Maybe<TrajectoryResampleConfig>;
@@ -19,13 +27,13 @@ export type Trajectory = {
   maxSpeedFactor: Scalars["Float"];
 };
 
-export type TrajectoryResampleConfigInput = {
+export type APITrajectoryResampleConfigInput = {
   resampleType: ResampleOption;
   length: Scalars["Int"];
 };
 
-export type TrajectoryCreateInput = {
-  resample?: Maybe<TrajectoryResampleConfigInput>;
+export type APITrajectoryCreateInput = {
+  resample?: Maybe<APITrajectoryResampleConfigInput>;
   minSpeedFactor: Scalars["Float"];
   maxSpeedFactor: Scalars["Float"];
 };

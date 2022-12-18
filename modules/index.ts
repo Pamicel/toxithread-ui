@@ -17,6 +17,8 @@ import {
   APICanvasConfigUpdateInput,
   CanvasConfig,
 } from "./sketchConfig/canvasConfig/canvasConfigTypes.ts";
+import { APITrailAspectCreateInput } from "./sketchConfig/trailAspect/trailAspectTypes.ts";
+import { APITrajectoryCreateInput } from "./sketchConfig/trajectory/trajectoryTypes.ts";
 
 const sharedTypeDefs = `#graphql
   type Color {
@@ -44,6 +46,11 @@ const sharedTypeDefs = `#graphql
     # Add canvas to config
     addCanvasToConfig(id: ID, canvas: CanvasConfigCreateInput): Config
     # Add trail to config
+    addTrailToConfig(
+      id: ID,
+      trailAspect: TrailAspectCreateInput,
+      trajectory: TrajectoryCreateInput
+    ): Config
 
     # Create Trajectory
     # Create TrailAspect
@@ -84,7 +91,16 @@ export const resolvers = {
       args: { _id?: string; name?: string },
     ): Promise<APIConfig> {
       console.log(`Query.config ${JSON.stringify(args)}`);
-      const config = await ConfigService.getConfig(args);
+      if (!args._id && !args.name) {
+        throw new Error("Must provide _id or name");
+      }
+      let config = undefined;
+      if (args._id) {
+        config = await ConfigService.getConfig({ _id: args._id });
+      }
+      if (args.name) {
+        config = await ConfigService.getConfig({ name: args.name });
+      }
       if (!config) {
         throw new Error("Config not found");
       }
@@ -175,6 +191,29 @@ export const resolvers = {
       });
       if (!newConfig) {
         throw new Error("Mutation.addCanvasToConfig - Config not updated");
+      }
+      return configToAPIConfig(newConfig);
+    },
+    async addTrailToConfig(
+      _: never,
+      { id, trailAspect, trajectory }: {
+        id: string;
+        trailAspect: APITrailAspectCreateInput;
+        trajectory: APITrajectoryCreateInput;
+      },
+    ): Promise<APIConfig | undefined> {
+      console.log(
+        `Mutation.addTrailToConfig ${id} ${JSON.stringify(trailAspect)} ${
+          JSON.stringify(trajectory)
+        }`,
+      );
+      const newConfig = await ConfigService.addTrailToConfig({
+        configId: id,
+        trailAspect,
+        trajectory,
+      });
+      if (!newConfig) {
+        throw new Error("Mutation.addTrailToConfig - Config not updated");
       }
       return configToAPIConfig(newConfig);
     },

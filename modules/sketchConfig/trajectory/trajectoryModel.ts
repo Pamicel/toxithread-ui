@@ -28,4 +28,4 @@ export const trajectorySchema = new Schema({
   },
 });
 
-export const trajectoryModel = model("Trajectory", trajectorySchema);
+export const TrajectoryModel = model("Trajectory", trajectorySchema);

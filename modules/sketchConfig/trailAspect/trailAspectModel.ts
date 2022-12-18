@@ -3,11 +3,6 @@ import { colorSchema } from "../canvasConfig/canvasConfigModel.ts";
 import { ShapeFunction, TrailRenderingOption } from "./trailAspectTypes.ts";
 
 export const trailAspectSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   trailColor: {
     type: colorSchema,
     default: { r: 255, g: 255, b: 255, a: 1 },
@@ -27,14 +22,15 @@ export const trailAspectSchema = new Schema({
   renderingPipeline: {
     type: [String],
     required: true,
-    validate: (value: string[]): boolean => {
-      return value.every((element) => element in TrailRenderingOption);
-    },
+    validate: (value: string[]) =>
+      value.every((element) =>
+        Object.keys(TrailRenderingOption).includes(element)
+      ),
   },
   widthFunction: {
     type: String,
     enum: Object.values(ShapeFunction),
-    default: ShapeFunction.Constant,
+    default: ShapeFunction.CONSTANT,
   },
   minRadiusFactor: {
     type: Number,
@@ -50,7 +46,7 @@ export const trailAspectSchema = new Schema({
   },
 });
 
-export const trailAspectModel = model(
+export const TrailAspectModel = model(
   "TrailAspect",
   trailAspectSchema,
 );
